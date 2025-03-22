@@ -10,7 +10,6 @@ const Questions = ({ question }) => {
     const textToSpeach = (text) => {
         if ('speechSynthesis' in window) {
             const speech = new SpeechSynthesisUtterance(text)
-            speech.rate = 1.5;
             window.speechSynthesis.speak(speech)
 
         }
