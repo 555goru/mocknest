@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/next"
+        }
+    ],
+    "regions": [
+        "sfo1",
+        "iad1"
+    ],
+    "git": {
+        "enabled": true
+    },
+    "cleanUrls": true
+}
