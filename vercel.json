@@ -6,10 +6,6 @@
             "use": "@vercel/next"
         }
     ],
-    "regions": [
-        "sfo1",
-        "iad1"
-    ],
     "git": {
         "enabled": true
     },
