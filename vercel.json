@@ -6,12 +6,6 @@
             "use": "@vercel/next"
         }
     ],
-    "routes": [
-        {
-            "src": "/",
-            "dest": "/dashboard"
-        }
-    ],
     "git": {
         "enabled": true
     },
