@@ -56,7 +56,7 @@ function Startinterview() {
                     <div>Loading questions...</div>  // Display a loading state until questions are available
                 )}
 
-                <Recordanswer />
+                <Recordanswer question={question} />
             </div>
 
         </div>

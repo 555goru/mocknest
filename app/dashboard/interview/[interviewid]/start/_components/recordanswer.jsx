@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button'
 import useSpeechToText from 'react-hook-speech-to-text'
 import { Mic, StopCircle } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { activeIndex } from './questions'
+import { chatSession } from '@/utils/Gemini'
 
-
-function Recordanswer() {
+function Recordanswer({ question = [] }) {
     const { toast } = useToast();
     const [answer, setanswer] = useState('')
-    const saveanswer = () => {
+    const saveanswer = async () => {
         if (isRecording) {
             stopSpeechToText()
             if (answer?.length < 10) {
@@ -19,6 +20,14 @@ function Recordanswer() {
                 })
                 return;
             }
+            const feedbackprompt = "Question:" + question[activeIndex]?.question + ", User Answer: " + answer + ", depends on question and user answer for given interview question " +
+                " please give us rating for answer and feedback as area of improvment if any " +
+                " in just 3 to 5 lines to imprive it in JSON format with rating field and feedback field"
+
+            const result = await chatSession.sendMessage(feedbackprompt)
+
+            const mockjsonresp = (result.response.text()).replace('```json', '').replace('```', '')
+            console.log(mockjsonresp)
 
         }
         else {
