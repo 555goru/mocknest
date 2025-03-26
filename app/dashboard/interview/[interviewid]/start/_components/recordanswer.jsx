@@ -28,6 +28,8 @@ function Recordanswer({ question = [] }) {
 
             const mockjsonresp = (result.response.text()).replace('```json', '').replace('```', '')
             console.log(mockjsonresp)
+            console.log(question[activeIndex]?.question)
+
 
         }
         else {
