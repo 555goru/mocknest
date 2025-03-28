@@ -14,7 +14,7 @@ function History() {
         if (user) {
             getHistory();
         }
-    }, [user]); // ✅ Ensure `getHistory` is called only when `user` is available
+    }, [user]);
 
     const getHistory = async () => {
         try {
@@ -38,10 +38,10 @@ function History() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-3">
                 {history.length > 0 ? (
                     history.map((interview, index) => (
-                        <Historyitemcard interview={interview} key={index} /> // ✅ Fixed prop name
+                        <Historyitemcard interview={interview} key={index} />
                     ))
                 ) : (
-                    <p className="text-gray-400">No history available.</p> // ✅ Display a message when history is empty
+                    <p className="text-gray-400">No history available.</p>
                 )}
             </div>
         </div>

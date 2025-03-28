@@ -1,13 +1,17 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { eq } from "drizzle-orm";
+import { db } from "@/utils/db";
 
 function Historyitemcard({ interview }) {
-    const router = useRouter(); // ✅ Fixed missing function call
+    const router = useRouter();
 
     const onStart = () => {
         router.push(`/dashboard/interview/${interview?.mockId}`);
     };
+
+
 
     const onFeedback = () => {
         router.push(`/dashboard/interview/${interview?.mockId}/feedback`);
@@ -26,16 +30,20 @@ function Historyitemcard({ interview }) {
                     size="sm"
                     variant="outline"
                     className="w-full"
-                    onClick={onFeedback} // ✅ Added functionality
+                    onClick={onFeedback}
                 >
                     Feedback
                 </Button>
-                <Button
-                    onClick={onStart}
-                    className="w-full hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all"
-                >
-                    Start
-                </Button>
+                {interview.iscompleted == false &&
+
+                    <Button
+
+                        onClick={onStart}
+                        className="w-full hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all"
+                    >
+                        Start
+                    </Button>
+                }
             </div>
         </div>
     );

@@ -1,3 +1,4 @@
+import { boolean } from "drizzle-orm/gel-core";
 import { serial, varchar } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
 
@@ -9,7 +10,8 @@ export const Mocknest = pgTable('Mocknest', {
     jobExperience: varchar('jobExperience', 255).notNull(),
     createdBy: varchar('createdBy', 255).notNull(),
     createdAt: varchar('createdAt', 255),
-    mockId: varchar('mockId', 255).notNull()
+    mockId: varchar('mockId', 255).notNull(),
+    iscompleted: boolean('iscompleted').default(false)
 
 
 })

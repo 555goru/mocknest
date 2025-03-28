@@ -11,7 +11,7 @@ import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import { db } from '@/utils/db'
 
-function Recordanswer({ question, activeIndex, setActiveIndex, interviewdata }) {
+function Recordanswer({ question, activeIndex, iscompleted, setActiveIndex, interviewdata }) {
     const { toast } = useToast();
     const [answer, setanswer] = useState('');
     const { user } = useUser()
@@ -57,8 +57,10 @@ function Recordanswer({ question, activeIndex, setActiveIndex, interviewdata }) 
                 description: "Answer Recorded Successfully",
             });
             setResults([])
+            setanswer('')
         }
         setResults([])
+        setanswer('')
         setloading(false)
     }
 
@@ -111,7 +113,7 @@ function Recordanswer({ question, activeIndex, setActiveIndex, interviewdata }) 
                     }} />
             </div>
             <Button
-                disabled={loading}
+                disabled={loading || iscompleted}
                 onClick={startstoprecording}
                 variant="outline"
                 className="my-10"
