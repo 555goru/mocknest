@@ -1,60 +1,84 @@
 "use client"
-import Webcam from 'react-webcam'
-import React, { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import useSpeechToText from 'react-hook-speech-to-text'
-import { Mic, StopCircle } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast'
-import { activeIndex } from './questions'
-import { chatSession } from '@/utils/Gemini'
+import Webcam from 'react-webcam';
+import React, { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import useSpeechToText from 'react-hook-speech-to-text';
+import { Mic, StopCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { chatSession } from '@/utils/Gemini';
+import { userAnswer } from '@/utils/schema';
+import { useUser } from '@clerk/nextjs';
+import moment from 'moment';
+import { db } from '@/utils/db'
 
-function Recordanswer({ question = [] }) {
+function Recordanswer({ question, activeIndex, setActiveIndex, interviewdata }) {
     const { toast } = useToast();
-    const [answer, setanswer] = useState('')
-    const saveanswer = async () => {
+    const [answer, setanswer] = useState('');
+    const { user } = useUser()
+    const [loading, setloading] = useState(false)
+    const startstoprecording = async () => {
         if (isRecording) {
-            stopSpeechToText()
-            if (answer?.length < 10) {
-                toast({
-                    description: "Unable to recognize your answer, Record Again",
-                })
-                return;
-            }
-            const feedbackprompt = "Question:" + question[activeIndex]?.question + ", User Answer: " + answer + ", depends on question and user answer for given interview question " +
-                " please give us rating for answer and feedback as area of improvment if any " +
-                " in just 3 to 5 lines to imprive it in JSON format with rating field and feedback field"
 
-            const result = await chatSession.sendMessage(feedbackprompt)
-
-            const mockjsonresp = (result.response.text()).replace('```json', '').replace('```', '')
-            console.log(mockjsonresp)
-            console.log(question[activeIndex]?.question)
+            stopSpeechToText();
 
 
+        } else {
+            startSpeechToText();
         }
-        else {
-            startSpeechToText()
+    };
+
+
+
+    const updateanswer = async () => {
+        console.log(answer)
+        setloading(true)
+        const feedbackprompt = "Question:" + question[activeIndex]?.question + ", User Answer: " + answer + ", depends on question and user answer for given interview question " +
+            " please give us rating for answer and feedback as area of improvement if any " +
+            " in just 3 to 5 lines to improve it in JSON format with rating field and feedback field";
+
+        const result = await chatSession.sendMessage(feedbackprompt);
+
+        const mockjsonresp = (result.response.text()).replace('```json', '').replace('```', '');
+        console.log(mockjsonresp);
+        const jsonfeedback = JSON.parse(mockjsonresp)
+
+        const resp = await db.insert(userAnswer).values({
+            mockidref: interviewdata?.mockId,
+            question: question[activeIndex]?.question,
+            correctanswer: question[activeIndex]?.answer,
+            userans: answer,
+            feedback: jsonfeedback?.feedback,
+            rating: jsonfeedback?.rating,
+            userEmail: user?.primaryEmailAddress?.emailAddress,
+            createdAt: moment().format('DD-MM-yyyy')
+        })
+        if (resp) {
+            toast({
+                description: "Answer Recorded Successfully",
+            });
+            setResults([])
         }
+        setResults([])
+        setloading(false)
     }
 
-    const {
-        error,
-        interimResult,
-        isRecording,
-        results,
-        startSpeechToText,
-        stopSpeechToText,
-    } = useSpeechToText({
+    const { error, interimResult, isRecording, results, startSpeechToText, stopSpeechToText, setResults } = useSpeechToText({
         continuous: true,
         useLegacyResults: false
-    })
+    });
 
     useEffect(() => {
         results.map((result) => {
-            setanswer(prevans => prevans + result?.transcript)
-        })
-    }, [results])
+            setanswer(prevans => prevans + result?.transcript);
+        });
+    }, [results]);
 
+    useEffect(() => {
+        if (!isRecording && answer.length > 10) {
+            updateanswer()
+        }
+
+    }, [answer])
 
     const requestCameraPermission = async () => {
         try {
@@ -68,9 +92,9 @@ function Recordanswer({ question = [] }) {
     useEffect(() => {
         requestCameraPermission();
     }, []);
+
     return (
         <div className='flex items-center justify-center flex-col'>
-
             <div className='flex flex-col justify-center items-center bg-black rounded-lg mt-20'>
                 <img
                     alt=""
@@ -87,7 +111,8 @@ function Recordanswer({ question = [] }) {
                     }} />
             </div>
             <Button
-                onClick={saveanswer}
+                disabled={loading}
+                onClick={startstoprecording}
                 variant="outline"
                 className="my-10"
             >
@@ -103,10 +128,8 @@ function Recordanswer({ question = [] }) {
                 )}
             </Button>
 
-
-            <Button className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={() => console.log(answer)}>Show Answer</Button>
         </div>
-    )
+    );
 }
 
-export default Recordanswer
+export default Recordanswer;

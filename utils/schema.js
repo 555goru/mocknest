@@ -13,3 +13,17 @@ export const Mocknest = pgTable('Mocknest', {
 
 
 })
+
+export const userAnswer = pgTable('UserAnswer',
+    {
+        id: serial('id').primaryKey(),
+        mockidref: varchar('mockidref', 255).notNull(),
+        question: varchar('question', 255).notNull(),
+        correctanswer: varchar('correctanswer', 255),
+        userans: varchar('userans', 255),
+        feedback: varchar('feedback', 255),
+        rating: varchar('rating', 255),
+        userEmail: varchar('userEmail', 255),
+        createdAt: varchar('createdAt', 255),
+    }
+)

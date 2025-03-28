@@ -1,6 +1,7 @@
 import { UserButton } from '@clerk/nextjs'
 import React from 'react'
 import Addnewinterview from './_components/Addnewinterview'
+import History from './_components/history'
 
 function Page() {
     return (
@@ -10,6 +11,7 @@ function Page() {
             <div className='grid grid-cols-1 md:grid-cols-3 my-5'>
                 <Addnewinterview />
             </div>
+            <History />
         </div>
 
     )
