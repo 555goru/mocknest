@@ -63,57 +63,79 @@ function Addnewinterview() {
         }
         setloading(false)
     }
+    const JobRoleInput = () => {
+        const [jobPosition, setJobPosition] = useState("");
 
-    return (
-        <div>
-            <div className='p-10 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all'
-                onClick={() => setopenDailog(true)}
-            >
-                <h2 className='font-bold text-lg text-center'>+  Add New</h2>
+        const handleChange = (event) => {
+            let value = event.target.value;
+
+            value = value.trimStart();
+
+            if (/^[A-Za-z\s]*$/.test(value)) {
+                setJobPosition(value);
+            }
+        };
+
+        return (
+            <div>
+                <div className='p-10 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all'
+                    onClick={() => setopenDailog(true)}
+                >
+                    <h2 className='font-bold text-lg text-center'>+  Add New</h2>
+                </div>
+                <Dialog open={opendailog} onOpenChange={setopenDailog} >
+
+                    <DialogContent className='max-w-2xl'>
+                        <DialogHeader>
+                            <DialogTitle className='text-2xl'>Tell us more about your job interviewing</DialogTitle>
+                            <DialogDescription>
+                                <form onSubmit={onSubmit}>
+
+                                    <div>
+                                        <h2>Add details about your job position/role, job description and years of experience</h2>
+                                        <div className="mt-7 mb-3">
+                                            <label htmlFor="job-position" className="block text-sm font-medium text-gray-700">
+                                                Job Role/Position
+                                            </label>
+                                            <input
+                                                id="job-position"
+                                                type="text"
+                                                placeholder="Ex. Full Stack Developer"
+                                                required
+                                                value={jobPosition}
+                                                onChange={handleChange}
+                                                className="border rounded-md p-2 w-full"
+                                            />
+                                        </div>
+                                        <div className='my-3'>
+                                            <label>Job Descrition (In Short)</label>
+                                            <Textarea placeholder='Ex. React, Angular, NodeJs, Mysql etc.' required onChange={(event) => setjobdescription(event.target.value)} />
+                                        </div>
+                                        <div className='my-3'>
+                                            <label>Years of Experience</label>
+                                            <Input placeholder='Ex. 5' max="40" min="0" type='number' required onChange={(event) => setjobexperience(event.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className='flex gap-5 justify-end'>
+                                        <Button type="button" variant="ghost" onClick={() => setopenDailog(false)}>Cancel</Button>
+                                        <Button type="submit" disabled={loading} className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all'>
+                                            {loading ?
+                                                <>
+                                                    <LoaderCircle className='animate-spin' />Generating Questions
+
+                                                </> : 'Start Interview'
+                                            }
+                                        </Button>
+                                    </div>
+                                </form>
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
+
             </div>
-            <Dialog open={opendailog} onOpenChange={setopenDailog} >
+        )
+    }
 
-                <DialogContent className='max-w-2xl'>
-                    <DialogHeader>
-                        <DialogTitle className='text-2xl'>Tell us more about your job interviewing</DialogTitle>
-                        <DialogDescription>
-                            <form onSubmit={onSubmit}>
-
-                                <div>
-                                    <h2>Add details about your job position/role, job description and years of experience</h2>
-                                    <div className='mt-7 my-3'>
-                                        <label>Job Role/Position</label>
-                                        <Input placeholder='Ex. Full Stack Developer' required onChange={(event) => setjobposition(event.target.value)} />
-                                    </div>
-                                    <div className='my-3'>
-                                        <label>Job Descrition (In Short)</label>
-                                        <Textarea placeholder='Ex. React, Angular, NodeJs, Mysql etc.' required onChange={(event) => setjobdescription(event.target.value)} />
-                                    </div>
-                                    <div className='my-3'>
-                                        <label>Years of Experience</label>
-                                        <Input placeholder='Ex. 5' max="40" min="0" type='number' required onChange={(event) => setjobexperience(event.target.value)} />
-                                    </div>
-                                </div>
-                                <div className='flex gap-5 justify-end'>
-                                    <Button type="button" variant="ghost" onClick={() => setopenDailog(false)}>Cancel</Button>
-                                    <Button type="submit" disabled={loading} className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all'>
-                                        {loading ?
-                                            <>
-                                                <LoaderCircle className='animate-spin' />Generating Questions
-
-                                            </> : 'Start Interview'
-                                        }
-                                    </Button>
-                                </div>
-                            </form>
-                        </DialogDescription>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
-
-        </div>
-    )
-}
-
-export default Addnewinterview
+    export default Addnewinterview
 
