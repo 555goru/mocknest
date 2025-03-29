@@ -1,7 +1,7 @@
 "use client";
 import { db } from '@/utils/db';
 import { Mocknest } from '@/utils/schema';
-import { useParams } from 'next/navigation'; // Keeping useParams here
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { eq } from "drizzle-orm";
 import Webcam from "react-webcam";
@@ -13,8 +13,8 @@ function Interview() {
     const [interviewdata, setinterviewdata] = useState(null);
     const [webcamenable, setwebcamenable] = useState(false);
 
-    const searchParams = useParams(); // Use useParams to get params from URL
-    const interviewId = searchParams.interviewid; // Extract the interviewid from URL
+    const searchParams = useParams();
+    const interviewId = searchParams.interviewid;
 
     useEffect(() => {
         if (interviewId) {
@@ -41,7 +41,6 @@ function Interview() {
         }
     };
 
-    // Log interview data whenever it changes
     useEffect(() => {
         if (interviewdata) {
             console.log(interviewdata);
@@ -84,7 +83,6 @@ function Interview() {
                 </div>
             </div>
             <div className='flex justify-end items-end'>
-                {/* If the interview data is available, show the start interview button */}
                 {interviewdata && (
                     <Button onClick={() => window.location.href = `/dashboard/interview/${interviewdata.mockId}/start`} className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all'>
                         Start Interview

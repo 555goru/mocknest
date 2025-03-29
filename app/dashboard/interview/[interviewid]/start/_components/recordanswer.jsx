@@ -85,7 +85,7 @@ function Recordanswer({ question, activeIndex, iscompleted, setActiveIndex, inte
     const requestCameraPermission = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            stream.getTracks().forEach(track => track.stop()); // Stop the camera after checking permission
+            stream.getTracks().forEach(track => track.stop());
         } catch (err) {
             alert('Camera permission is denied or unavailable.');
         }

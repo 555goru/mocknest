@@ -12,7 +12,7 @@ import {
 import { ChevronsUpDown } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { useRouter } from "next/navigation";
-
+import { Mocknest } from '@/utils/schema';
 function Feedback() {
     const router = useRouter();
     const [feedbacklist, setFeedbackList] = useState([]);
@@ -38,8 +38,12 @@ function Feedback() {
             if (result.length > 0) {
                 const ratings = result.map(row => parseInt(row.rating, 10))
                 const totalRating = ratings.reduce((sum, item) => sum + item, 0);
-                let avgRating = (totalRating / result.length).toFixed(1); // One decimal format
-                setAverageRating(Math.min(avgRating, 10)); // Ensure max value is 10
+                let avgRating = (totalRating / result.length).toFixed(1);
+                setAverageRating(Math.min(avgRating, 10));
+                await db
+                    .update(Mocknest)
+                    .set({ feedbackrating: averageRating })
+                    .where(eq(Mocknest.mockId, interviewid));
 
             }
         } catch (error) {

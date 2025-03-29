@@ -91,20 +91,20 @@ function Startinterview() {
 
             <div className="flex justify-end gap-6 mt-10">
                 {activeIndex > 0 && (
-                    <Button onClick={() => setActiveIndex(activeIndex - 1)}>
+                    <Button className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={() => setActiveIndex(activeIndex - 1)}>
                         Previous
                     </Button>
                 )}
 
                 {activeIndex < question.length - 1 && (
-                    <Button onClick={() => setActiveIndex(activeIndex + 1)}>
+                    <Button className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={() => setActiveIndex(activeIndex + 1)}>
                         Next
                     </Button>
                 )}
 
                 {activeIndex === question.length - 1 && interviewdata && (
                     <Link href={`/dashboard/interview/${interviewdata.mockId}/feedback`}>
-                        <Button>
+                        <Button className='hover:bg-primary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={autosubmit}>
                             Submit
                         </Button>
                     </Link>

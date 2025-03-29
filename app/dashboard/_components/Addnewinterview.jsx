@@ -40,7 +40,6 @@ function Addnewinterview() {
         const inputPrompt = "Job Position: " + jobposition + ", Job Description: " + jobdescription + ", Years of Experience: " + jobexperience + ", Depends on Job Position, Job Description and Uears of Experience give us " + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " Interview questions along with answers in JSON format, Give us question and answer field on JSON"
         const result = await chatSession.sendMessage(inputPrompt);
         const mockjsonresp = (result.response.text()).replace('```json', '').replace('```', '')
-        console.log(JSON.parse(mockjsonresp))
         setjsonresp(mockjsonresp)
         if (mockjsonresp) {
             const resp = await db.insert(Mocknest).values({
@@ -50,7 +49,7 @@ function Addnewinterview() {
                 jobDesc: jobdescription,
                 jobExperience: jobexperience,
                 createdBy: user?.primaryEmailAddress?.emailAddress,
-                createdAt: moment().format('DD-MM-yyyy')
+                createdAt: moment().format('DD-MM-yyyy'),
             }).returning({ mockId: Mocknest.mockId })
 
             console.log("inserted id:", resp)
