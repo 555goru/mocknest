@@ -36,15 +36,17 @@ function Feedback() {
             setFeedbackList(result);
 
             if (result.length > 0) {
-                const ratings = result.map(row => parseInt(row.rating, 10))
+                const ratings = result.map(row => parseInt(row.rating, 10) || 0);
                 const totalRating = ratings.reduce((sum, item) => sum + item, 0);
-                let avgRating = (totalRating / result.length).toFixed(1);
-                setAverageRating(Math.min(avgRating, 10));
+                let avgRating = parseFloat((totalRating / result.length).toFixed(1));
+
+                avgRating = Math.min(avgRating, 10);
+                setAverageRating(avgRating);
+
                 await db
                     .update(Mocknest)
-                    .set({ feedbackrating: averageRating })
+                    .set({ feedbackrating: avgRating })
                     .where(eq(Mocknest.mockId, interviewid));
-
             }
         } catch (error) {
             console.error("Error fetching feedback:", error);
