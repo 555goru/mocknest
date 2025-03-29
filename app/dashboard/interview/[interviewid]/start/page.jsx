@@ -58,6 +58,7 @@ function Startinterview() {
             if (result.length > 0) {
                 const jsonmockresp = JSON.parse(result[0].jsonMockResp);
                 setquestion(jsonmockresp);
+                console.log(question)
                 setinterviewdata(result[0]);
             } else {
                 console.error('Interview data not found');
